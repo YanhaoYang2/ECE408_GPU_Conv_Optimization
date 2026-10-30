@@ -1,0 +1,28 @@
+batch,variant,variant_id,op1_ms,op2_ms,total_s,accuracy,note
+100,PM1 baseline (unroll),pm1,1.61,1.28,1.43,0.860,naive unrolled conv + separate GEMM
+100,PM2 fused (baseline),pm2,0.44,0.32,1.45,0.860,im2col + single fused kernel
+100,Req_0 streams,req0,26.41,15.63,3.45,0.860,3 streams x 32-image segments; launch overhead dominates
+100,Req_1 WMMA TF32,req1,0.55,0.35,3.31,0.860,tensor-core GEMM; slower than FP32 path
+100,OP_0 constant memory,op0,0.37,0.50,3.81,0.860,weights in __constant__; non-uniform warp access
+100,OP_1 __restrict__,op1,0.45,0.32,2.74,0.860,alias-free pointers
+100,OP_2 loop unroll,op2,0.42,0.32,4.40,0.860,manual k+=4 unroll
+100,OP_4 cuBLAS,op4,18.65,1.48,1.60,0.860,vendor SGEMM
+100,OP_5 FP16 (__half2),op5,0.52,0.32,1.33,0.850,packed half2 math
+1000,PM1 baseline (unroll),pm1,10.86,10.32,9.52,0.886,naive unrolled conv + separate GEMM
+1000,PM2 fused (baseline),pm2,3.54,3.04,11.29,0.886,im2col + single fused kernel
+1000,Req_0 streams,req0,54.27,36.29,11.63,0.886,3 streams x 32-image segments
+1000,Req_1 WMMA TF32,req1,4.71,3.17,11.28,0.886,tensor-core GEMM
+1000,OP_0 constant memory,op0,3.43,4.87,11.47,0.886,weights in __constant__
+1000,OP_1 __restrict__,op1,3.51,3.04,11.45,0.886,alias-free pointers
+1000,OP_2 loop unroll,op2,3.55,3.04,11.25,0.886,manual k+=4 unroll
+1000,OP_4 cuBLAS,op4,26.53,9.90,10.16,0.886,vendor SGEMM
+1000,OP_5 FP16 (__half2),op5,4.95,3.06,10.90,0.865,packed half2 math
+10000,PM1 baseline (unroll),pm1,85.21,73.17,96.86,0.8714,naive unrolled conv + separate GEMM
+10000,PM2 fused (baseline),pm2,34.26,30.11,89.79,0.8714,im2col + single fused kernel
+10000,Req_0 streams,req0,481.95,366.06,91.61,0.8714,3 streams x 32-image segments; per-op time blows up
+10000,Req_1 WMMA TF32,req1,46.09,31.37,89.11,0.8714,tensor-core GEMM
+10000,OP_0 constant memory,op0,34.29,48.54,99.79,0.8714,weights in __constant__
+10000,OP_1 __restrict__,op1,34.25,30.11,89.87,0.8714,alias-free pointers
+10000,OP_2 loop unroll,op2,33.97,30.10,88.66,0.8714,manual k+=4 unroll
+10000,OP_4 cuBLAS,op4,97.30,62.32,90.55,0.8714,vendor SGEMM
+10000,OP_5 FP16 (__half2),op5,49.29,30.38,87.37,0.8536,packed half2 math; best end-to-end total
