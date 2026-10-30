@@ -20,7 +20,7 @@ machine-readable **results table**.
 
 ## TL;DR
 
-| | |
+| Aspect | Result |
 |---|---|
 | **Starting point** | Naive unrolled convolution + separate GEMM: **85.2 ms + 73.2 ms** per layer (batch 10,000, 96.9 s end-to-end) |
 | **Fused im2col kernel** | **34.3 ms + 30.1 ms** — **2.5×** faster per layer, 89.8 s end-to-end |
